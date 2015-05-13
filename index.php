@@ -6,19 +6,20 @@ session_start();
 
 //make constants using define.
 define('clientID', '772cefd08fdb49de9716fb8a9e8b75cf');
-define('client_Secret', 'a51cb2f090164afbbd241708343577f3');
+define('clientSecret', 'a51cb2f090164afbbd241708343577f3');
 define('redirectURI', 'http://localhost/appacademyapi/index.php');
 define('ImageDirectory', 'pics/');
 //define act like a globe varible
 
-if isset(($_GET['code'])){
+if (isset($_GET['code'])){
 	$code = ($_GET['code']);
 	$url = 'https://api.instagram.com/oauth/access_token';
 	$access_token_setting  = array('client_id' => clientID,
-								'client_Secret' => clientSecret,
+								'client_secret' => clientSecret,
 								'grant_type' => 'authorization_code',
 								'redirect_uri' => redirectURI,
-								'code' => $code  );
+								'code' => $code 
+								 );
 }
 
 
