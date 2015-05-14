@@ -20,9 +20,16 @@ if (isset($_GET['code'])){
 								'redirect_uri' => redirectURI,
 								'code' => $code 
 								 );
+	//cURL is what we use in PHP, it's a library calls to other API's
+	$curl = curl_init($turL);//curl is URL
+	curl_setopt($curl, CURLOPT_POST, true);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $access_token_setting);
+	curl_setopt($curl, CURLOPT_RETURNRAMSFER, 1);
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//
 }
 
-
+$result - curl_exec($curl);
+curl_close();
 ?>
 
 
