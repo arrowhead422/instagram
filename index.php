@@ -9,7 +9,20 @@ define('clientID', '772cefd08fdb49de9716fb8a9e8b75cf');
 define('clientSecret', 'a51cb2f090164afbbd241708343577f3');
 define('redirectURI', 'http://localhost/appacademyapi/index.php');
 define('ImageDirectory', 'pics/');
+//
 //define act like a globe varible
+
+function connectToInstagram($url){
+	$ch = curl_init();
+
+	curl_setopt_array($ch, array(
+		CURLOPT_URL => $url,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_SSL_VERIFYHOST => 2,
+
+		));
+}
 
 if (isset($_GET['code'])){
 	$code = ($_GET['code']);
@@ -24,9 +37,8 @@ if (isset($_GET['code'])){
 	$curl = curl_init($url);//curl is URL
 	curl_setopt($curl, CURLOPT_POST, true);
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $access_token_setting);
-	curl_setopt($curl, CURLOPT_POSTFIELDS, 1);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//
-
 
 $result = curl_exec($curl);
 curl_close($curl);
