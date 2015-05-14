@@ -21,15 +21,20 @@ if (isset($_GET['code'])){
 								'code' => $code 
 								 );
 	//cURL is what we use in PHP, it's a library calls to other API's
-	$curl = curl_init($turL);//curl is URL
+	$curl = curl_init($url);//curl is URL
 	curl_setopt($curl, CURLOPT_POST, true);
 	curl_setopt($curl, CURLOPT_POSTFIELDS, $access_token_setting);
-	curl_setopt($curl, CURLOPT_RETURNRAMSFER, 1);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, 1);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//
-}
 
-$result - curl_exec($curl);
-curl_close();
+
+$result = curl_exec($curl);
+curl_close($curl);
+
+$results = json_decode($result, true);
+echo $results['user']['username'];
+}
+else{
 ?>
 
 
@@ -49,8 +54,9 @@ after getting approval we are now going to have the information so we can play w
 			<script type="js/main.js"></script>
 </body>
 </html>	
+<?php
 
-
+}
 
 
 
