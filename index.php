@@ -22,6 +22,17 @@ function connectToInstagram($url){
 		CURLOPT_SSL_VERIFYHOST => 2,
 
 		));
+		$result = curl_exec($ch);
+		curl_close($ch);
+		return $result;
+}
+
+function getUserID($userName){
+	$url = 'http://api.instagram.com/v1/users/search?q='.$userName.'&client_id'.clientID;
+	$instagramInfo = connectToInstagram($url);
+	$results = json_decode($instagramInfo, true);
+
+	echo $results['data']['0']['id'];
 }
 
 if (isset($_GET['code'])){
@@ -44,7 +55,7 @@ $result = curl_exec($curl);
 curl_close($curl);
 
 $results = json_decode($result, true);
-echo $results['user']['username'];
+getUserID($results['user']['username']);
 }
 else{
 ?>
