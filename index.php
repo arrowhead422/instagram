@@ -12,44 +12,54 @@ define('ImageDirectory', 'pics/');
 //
 //define act like a globe varible
 
-function connectToInstagram($url){
-	$ch = curl_init();
-
-	curl_setopt_array($ch, array(
-		CURLOPT_URL => $url,
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_SSL_VERIFYPEER => false,
-		CURLOPT_SSL_VERIFYHOST => 2,
-
-		));
-		$result = curl_exec($ch);
-		curl_close($ch);
-		return $result;
-}
+ function connectToInstagram($url){
+ 	$ch = curl_init();
+ 	curl_setopt_array($ch, array(
+ 		CURLOPT_URL => $url,
+ 		CURLOPT_RETURNTRANSFER => true,
+ 		CURLOPT_SSL_VERIFYPEER => false,
+ 		CURLOPT_SSL_VERIFYHOST => 2,
+ 		));
+ 	$result = curl_exec($ch);
+ 	curl_close($ch);
+ 	return $result;
+ }
 
 function getUserID($userName){
-	$url = 'http://api.instagram.com/v1/users/search?q='.$userName.'&client_id'.clientID;
+	$url = 'https://api.instagram.com/v1/users/search?q='.$userName.'&client_id'.clientID;
 	$instagramInfo = connectToInstagram($url);
 	$results = json_decode($instagramInfo, true);
 
-	echo $results['data']['0']['id'];
+	return $results['data']['0']['id'];
 }
 //function to print out images onto screen
-function printImages($userID){
-	$url = 'http://api.instagram.com/v1/users'.$userID.'/media/recent?client_id='.clientID.'&count=5'
+	function printImages($userID){
+	$url = 'https://api.instagram.com/v1/users/'.$userID.'/media/recent?client_id='.clientID.'&count=5';
 	$instagramInfo = connectToInstagram($url);
 	$results = json_decode($instagramInfo, true);
-	// parse throught the information one by one.
-	foreach ($results ['data'] as $items) {
-		$image_url = $items['images']['low_resolution']['url'];//going to go through all of my results and give myself back the URL of those pictures
-		echo '<img src=" '.$image_url.'"/><br/>';
-		# code...
+
+	foreach ($results['data'] as $items) {
+	$image_url = $items['images']['low_resolution']['url'];
+	 //going to go through all of my results and give myself back the URL of those pictures because we want to save it in the PHP Server
+	echo '<img src=" '.$image_url.' "/><br/>';
+	//calling a function to save that $image_url
+		savePictures($image_url);
 	}
+}
+//function to save image ot server
+function savePictures($image_url){
+	echo $image_url.'<br>';
+	$filename = basename($image_url);
+	echo $filename . '<br>';
+
+	$destination = ImageDirectory . $filename;
+	file_put_contents($destination, file_get_contents($image_url));// goes and grabs
+
 }
 if (isset($_GET['code'])){
 	$code = ($_GET['code']);
 	$url = 'https://api.instagram.com/oauth/access_token';
-	$access_token_setting  = array('client_id' => clientID,
+	$access_token_settings  = array('client_id' => clientID,
 								'client_secret' => clientSecret,
 								'grant_type' => 'authorization_code',
 								'redirect_uri' => redirectURI,
@@ -58,7 +68,7 @@ if (isset($_GET['code'])){
 	//cURL is what we use in PHP, it's a library calls to other API's
 	$curl = curl_init($url);//curl is URL
 	curl_setopt($curl, CURLOPT_POST, true);
-	curl_setopt($curl, CURLOPT_POSTFIELDS, $access_token_setting);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $access_token_settings);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);//
 
