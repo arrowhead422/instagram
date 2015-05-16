@@ -26,7 +26,7 @@ define('ImageDirectory', 'pics/');
  }
 
 function getUserID($userName){
-	$url = 'https://api.instagram.com/v1/users/search?q='.$userName.'&client_id'.clientID;
+	$url = 'https://api.instagram.com/v1/users/search?q='.$userName.'&client_id='.clientID;
 	$instagramInfo = connectToInstagram($url);
 	$results = json_decode($instagramInfo, true);
 
