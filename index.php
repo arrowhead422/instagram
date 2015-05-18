@@ -1,8 +1,8 @@
 <?php
-// configuration for our php sever
-set_time_limit(0);
-ini_set('default_socket_timeout', 300);
-session_start();
+ //Configuration fof our PHP server
+ set_time_limit(0);
+ ini_set("default_socket_timeout", 300);
+ session_start();
 
 //make constants using define.
 define('clientID', '772cefd08fdb49de9716fb8a9e8b75cf');
@@ -12,7 +12,7 @@ define('ImageDirectory', 'pics/');
 //
 //define act like a globe varible
 
- function connectToInstagram($url){
+function connectToInstagram($url){
  	$ch = curl_init();
  	curl_setopt_array($ch, array(
  		CURLOPT_URL => $url,
@@ -25,26 +25,26 @@ define('ImageDirectory', 'pics/');
  	return $result;
  }
 
-function getUserID($userName){
-	$url = 'https://api.instagram.com/v1/users/search?q='.$userName.'&client_id='.clientID;
-	$instagramInfo = connectToInstagram($url);
-	$results = json_decode($instagramInfo, true);
-
-	return $results['data']['0']['id'];
-}
-//function to print out images onto screen
-	function printImages($userID){
-	$url = 'https://api.instagram.com/v1/users/'.$userID.'/media/recent?client_id='.clientID.'&count=5';
-	$instagramInfo = connectToInstagram($url);
-	$results = json_decode($instagramInfo, true);
-
-	foreach ($results['data'] as $items) {
-	$image_url = $items['images']['low_resolution']['url'];
-	 //going to go through all of my results and give myself back the URL of those pictures because we want to save it in the PHP Server
+  function getUserID($userName){
+ 	$url = 'https://api.instagram.com/v1/users/search?q='.$userName.'&client_id='.clientID; //to get id
+ 	$instagramInfo = connectToInstagram($url); //connecting to instagram
+ 	$results = json_decode($instagramInfo, true); //creating a local variable to decode json information
+ 
+ 	return $results['data']['0']['id']; //echoing out userID
+ }
+//Function to print out images onto the screen
+function printImages($userID){
+$url = 'https://api.instagram.com/v1/users/'.$userID.'/media/recent?client_id='.clientID.'&count=5';
+$instagramInfo = connectToInstagram($url);
+$results = json_decode($instagramInfo, true);
+//Parse through the information one by one
+foreach ($results['data'] as $items) {
+	$image_url = $items['images']['low_resolution']['url']; //going to go through all of my results and give myself back the URL of those pictures because we want to save it in the PHP Server
 	echo '<img src=" '.$image_url.' "/><br/>';
 	//calling a function to save that $image_url
-		savePictures($image_url);
-	}
+savePictures($image_url);
+}
+ 	echo "<a href='index.php' class='btn btn-primary' align='right'> Log Out </a>";
 }
 //function to save image ot server
 function savePictures($image_url){
